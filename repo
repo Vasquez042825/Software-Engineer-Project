@@ -1,0 +1,4 @@
+git remote add upstream
+https://github.com/Vasquez042825/Software-Engineer-Project.git
+
+git push -u upstream master
