@@ -82,7 +82,7 @@ public:
 		customerAccount.open("Cust_" + customerID, fstream::out, fstream::app);
 
 		if (customerAccount.is_open()) {
-			customerAccount.write("freeze user account.", 20);
+			customerAccount.write("FREEZE USER ACCOUNT.", 20);
 		}
 	}
 
