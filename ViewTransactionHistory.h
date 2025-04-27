@@ -16,7 +16,7 @@ using namespace std;
 
 class ViewTransactionHistory {
 private:
-	fstream customerInfo;			//For opening customer transaction record file
+	fstream customerInfo;		//For opening customer transaction record file
 	string transactionRecord = "";	//For holding strings from customer file
 
 public:
