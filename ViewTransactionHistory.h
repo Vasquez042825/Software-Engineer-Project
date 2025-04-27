@@ -40,13 +40,13 @@ public:
 	void getWithdrawals() {
 		if (customerInfo.is_open()) {
 			while (customerInfo >> transactionRecord)) {
-			if (transactionRecord == "Withdrawal") {
-				cout << "Withdrawals:" << endl;
-				customerInfo >> transactionRecord;
-				cout << transactionRecord;
-				customerInfo >> transactionRecord;
-				cout << transactionRecord;
-			}
+				if (transactionRecord == "Withdrawal") {
+					cout << "Withdrawals:" << endl;
+					customerInfo >> transactionRecord;
+					cout << transactionRecord;
+					customerInfo >> transactionRecord;
+					cout << transactionRecord;
+				}
 			}
 		}
 		else {
