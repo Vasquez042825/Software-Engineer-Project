@@ -1,18 +1,18 @@
+#include <iostream>
+using namespace std;
+
 /*
 Code Artifact: AccountBalance
 Description: Creates and manages Account Balance entities
 Programmer: Đạt Trịnh
-Date Programmed: April 26, 2025
+Date Programmed: April 27, 2025
 Variables: currentBalance: stores the current balance of the account,
            balanceHolderID: stores the ID of the account holder
 Files Accessed: None
 Files Changed: None
 */
 
-#include <iostream>
-using namespace std;
-
-// AccountBalance Class
+// AccountBalance class
 class AccountBalance {
 private:
     float currentBalance;
@@ -25,30 +25,30 @@ public:
         balanceHolderID = holderID;
     }
 
-    // Getter for current balance
+    // Function to get the current balance
     float getBalance() {
         return currentBalance;
     }
 
-    // Getter for balance holder ID
+    // Function to get the balance holder ID
     int getBalanceHolderID() {
         return balanceHolderID;
     }
 
-    // Show balance details
+    // Function to show balance details
     void showBalanceDetails() {
-        cout << "Account Holder ID: " << balanceHolderID
-            << ", Balance: $" << currentBalance << endl;
+        cout << "Account Holder ID: " << balanceHolderID << endl;
+        cout << "Current Balance: $" << currentBalance << endl;
     }
 };
 
-// Example usage
 int main() {
     // Create an AccountBalance object
-    AccountBalance account(1500.75, 12345);
+    AccountBalance account(1200.50, 1001);
 
-    // Display balance details
+    // Show the account details
     account.showBalanceDetails();
 
     return 0;
 }
+
