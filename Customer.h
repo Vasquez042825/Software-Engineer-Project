@@ -93,11 +93,11 @@ public:
         return username;
     }
     void setUsername(const string& user) {
-        username = user; 
+        username = user;
     }
 
     // Getter and Setter for password
-    string getPassword() const { 
+    string getPassword() const {
         return password;
     }
     void setPassword(const string& pass) {
@@ -114,26 +114,48 @@ public:
         balance = newBalance;
     }
 
-      // Load customer information from file
-void loadCustomerFromFile(ifstream& inputFile) {
-    inputFile >> customerID
-              >> firstName
-              >> lastName
-              >> mobileNumber
-              >> address
-              >> email
-              >> dateOfBirth
-              >> username
-              >> password
-        >> balance;
-}
-void saveCustomerToFile(ofstream& outputFile) const {
-    outputFile << customerID << " " << firstName << " " << lastName << " "
-        << mobileNumber << " " << address << " " << email << " "
-        << dateOfBirth << " " << username << " " << password << " "
-        << balance << endl;
-}
+    // Load customer information from file
+    void loadCustomerFromFile(ifstream& inputFile) {
+        inputFile >> customerID
+            >> firstName
+            >> lastName
+            >> mobileNumber
+            >> address
+            >> email
+            >> dateOfBirth
+            >> username
+            >> password
+            >> balance;
+    }
+    void saveCustomerToFile() const {
+        string filename = "Cust_info_" + customerID + ".txt"; // Build filename automatically
+        ofstream outputFile(filename);
 
+        if (outputFile.is_open()) {
+            outputFile << customerID << " " << firstName << " " << lastName << " "
+                << mobileNumber << " " << address << " " << email << " "
+                << dateOfBirth << " " << username << " " << password << " "
+                << balance << endl;
+            outputFile.close();
+            cout << "Customer saved successfully to " << filename << endl;
+        }
+        else {
+            cout << "Error: Unable to save customer to file." << endl;
+        }
+    }
+    // Save customer to a file (pass ofstream)
+    void saveCustomerToFile(ofstream& outputFile) const {
+        outputFile << customerID << " "
+            << firstName << " "
+            << lastName << " "
+            << mobileNumber << " "
+            << address << " "
+            << email << " "
+            << dateOfBirth << " "
+            << username << " "
+            << password << " "
+            << balance << endl;
+    }
 
     // display() - outputs all customer information in a neat, formatted manner
     void display() const {
@@ -143,8 +165,7 @@ void saveCustomerToFile(ofstream& outputFile) const {
         cout << "Mobile:  " << mobileNumber << endl;
         cout << "Address: " << address << endl;
         cout << "Email:   " << email << endl;
-        cout << "DOB:        " << dateOfBirth << endl;
+        cout << "DOB:     " << dateOfBirth << endl;
         cout << "Balance: $" << balance << endl;
     }
 };
-
