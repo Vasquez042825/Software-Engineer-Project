@@ -15,7 +15,6 @@ Files Changed: Cust_(customerID)
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "Customer.h"
 using namespace std;
 
 class Admin {
@@ -55,16 +54,16 @@ public:
 		return username;
 	}
 
-	void setUsername(string username) {
-		username = username;
+	void setUsername(string adminUsername) {
+		username = adminUsername;
 	}
 
 	string getPassword() {
 		return password;
 	}
 
-	void setPassword(string password) {
-		password = password;
+	void setPassword(string adminPassword) {
+		password = adminPassword;
 	}
 
 	//Displays all info on Administrator
@@ -78,33 +77,33 @@ public:
 
 	//Freezes all transactions from occurring through customer's account
 	void freezeCustomerAccount(string customerID) {
-		fstream customerAccount;
-		customerAccount.open("Cust_" + customerID, fstream::out, fstream::app);
+		ofstream customerAccount;	//Access customer account file
+		
+		customerAccount.open("Cust_" + customerID + ".txt", ios_base::app);
 
 		if (customerAccount.is_open()) {
-			customerAccount.write("FREEZE USER ACCOUNT.", 20);
+			customerAccount.write("\nFREEZE USER ACCOUNT.", 20);
+			cout << "Customer account has been frozen." << endl;
 		}
 	}
 
 	//Erases customer's information from database
 	void deactivateCustomerAccount(string customerID) {
-		fstream customerAccount;
-		customerAccount.open("Cust_" + customerID);
-
-		if (customerAccount.is_open()) {
-			customerAccount.trunc;
-			customerAccount.close();
+		//If customer account file cannot be removed it is not in database, otherwise delete the file
+		if ((remove(("Cust_info_" + customerID + ".txt").c_str())) != 0){
+			cout << "Customer account does not exist in database." << endl;
 		}
 		else {
-			cout << "Customer account does not exist in database." << endl;
+			cout << "Customer account has been deactivated." << endl;
 		}
 	}
 
 	//Changes customer's password
 	void resetCustomerPassword(string newPassword, string customerID) {
-		fstream customerAccount;
+		ifstream customerAccount;	//Access customer account file
 		string line;
-		customerAccount.open("Cust_" + customerID);
+		
+		customerAccount.open("Cust_" + customerID + ".txt");
 
 		if (customerAccount.is_open()) {
 			while (getline(customerAccount, line)) {
