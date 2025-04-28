@@ -22,7 +22,7 @@ private:
 public:
 	//Constructor attempts to open customer information in database
 	ViewTransactionHistory(string customerID) {
-		customerInfo.open("Cust_" + customerID);
+		customerInfo.open("Cust_" + customerID + ".txt");
 
 		if (!customerInfo.is_open()) {
 			cout << "Customer's file could not be accessed." << endl;
@@ -39,7 +39,7 @@ public:
 	//Locate all instances of withdrawals in customer file and display
 	void getWithdrawals() {
 		if (customerInfo.is_open()) {
-			while (customerInfo >> transactionRecord)) {
+			while (customerInfo >> transactionRecord) {
 				if (transactionRecord == "Withdrawal") {
 					cout << "Withdrawals:" << endl;
 					customerInfo >> transactionRecord;
@@ -57,7 +57,7 @@ public:
 	//Locate all instances of deposits in customer file and display
 	void getDeposits() {
 		if (customerInfo.is_open()) {
-			while (customerInfo >> transactionRecord)) {
+			while (customerInfo >> transactionRecord) {
 				if (transactionRecord == "Deposit") {
 					cout << "Deposits:" << endl;
 					customerInfo >> transactionRecord;
@@ -92,6 +92,6 @@ public:
 			cout << transactionRecord;
 		}
 	}
-}
+};
 
 #endif
