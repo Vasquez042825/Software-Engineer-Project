@@ -21,7 +21,7 @@ class Admin {
 private:
 	string firstName = "N/A";	// stores employee's first name
 	string lastName = "N/A";	// stores employee's last name
-	string employeeID = "N/A";	// stores employee's ID
+	string employeeID = "N/A";	// stores employee's ID as alphanumeric string
 	string username = "N/A";	// stores employee's username
 	string password = "N/A";	// stores employee's password
 
