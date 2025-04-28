@@ -100,18 +100,47 @@ public:
 
 	//Changes customer's password
 	void resetCustomerPassword(string newPassword, string customerID) {
-		ifstream customerAccount;	//Access customer account file
-		string line;
-		
-		customerAccount.open("Cust_" + customerID + ".txt");
+		fstream customerAccount;	//Access customer's account file
+		fstream tempFile;		//Create new customer account file with updated contents
+		string line;			//Store lines from file
 
+		customerAccount.open("Cust_info_" + customerID + ".txt");
+		tempFile.open("TEMP.txt", ios_base::out);
+
+		//Verify customer account file is accessible and update password line if true
 		if (customerAccount.is_open()) {
 			while (getline(customerAccount, line)) {
-				if (line == "Password:") {
-					NULL; //in progress
+				if (line[0] == 'P') {
+					tempFile << "Password: " << newPassword << '\n';
+					tempFile.flush();
+					continue;
 				}
+
+				tempFile << line << '\n';
+				tempFile.flush();
+
 			}
+
+			customerAccount.close();
+			tempFile.close();
+
+			//Close and reopen temp file and customer account file to truncate account file for updating
+			tempFile.open("TEMP.txt", ios_base::in);
+			customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::trunc | ios::out);
+			
+			while (getline(tempFile, line)) {
+				customerAccount << line << '\n';
+			}
+			
+			customerAccount.close();
+			tempFile.close();
+			remove("TEMP.txt");
+			cout << "Customer password has been updated." << endl;
 		}
+		else {
+			cout << "Customer account does not exist in database." << endl;
+		}
+
 	}
 
 };
