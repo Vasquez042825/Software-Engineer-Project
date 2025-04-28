@@ -1,3 +1,22 @@
+// Code Artifact: Customer
+// Description: Defines Customer entity including personal information, 
+//              login credentials, and account balance.
+// Programmer: Liza Tamang
+// Date Programmed: April 27, 2025
+// Variables: 
+//  - customerID: stores customer's unique ID
+//  - firstName: stores customer's first name
+//  - lastName: stores customer's last name
+//  - mobileNumber: stores customer's mobile number
+//  - address: stores customer's address
+//  - email: stores customer's email address
+//  - dateOfBirth: stores customer's date of birth
+//  - username: stores customer's login username
+//  - password: stores customer's login password
+//  - balance: stores customer's account balance
+// Files Accessed: Customers.txt, Cust_info_(customerID).txt
+// Files Changed: Customers.txt, Cust_info_(customerID).txt
+
 #pragma once
 
 #include <iostream>
