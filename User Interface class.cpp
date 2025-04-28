@@ -1,3 +1,7 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
 /*
 Code Artifact: UserInterface
 Description: Creates and manages User Interface displays for customers and admins
@@ -8,9 +12,6 @@ Variables: customerUI: stores the customer user interface message,
 Files Accessed: None
 Files Changed: None
 */
-#include <iostream>
-#include <string>
-using namespace std;
 
 // UserInterface Class
 class UserInterface {
@@ -25,25 +26,25 @@ public:
         adminUI = "Displaying Admin User Interface...";
     }
 
-    // Show Customer UI
+    // Function to show Customer UI
     void showCustomerUI() {
         cout << customerUI << endl;
     }
 
-    // Show Admin UI
+    // Function to show Admin UI
     void showAdminUI() {
         cout << adminUI << endl;
     }
 };
 
-// Example usage
 int main() {
-    // Create a UserInterface object
+    // Make an object
     UserInterface ui;
 
-    // Display both UIs
+    // Show both UIs
     ui.showCustomerUI();
     ui.showAdminUI();
 
     return 0;
 }
+
