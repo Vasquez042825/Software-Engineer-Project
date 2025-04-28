@@ -44,7 +44,7 @@ public:
 
 int main() {
     // Create an AccountBalance object
-    AccountBalance account(1200.50, 1001);
+    AccountBalance account(2000, 1000);
 
     // Show the account details
     account.showBalanceDetails();
