@@ -1,3 +1,14 @@
+/*
+Code Artifact: AccountBalance
+Description: Creates and manages Account Balance entities
+Programmer: Đạt Trịnh
+Date Programmed: April 26, 2025
+Variables: currentBalance: stores the current balance of the account,
+           balanceHolderID: stores the ID of the account holder
+Files Accessed: None
+Files Changed: None
+*/
+
 #include <iostream>
 using namespace std;
 
