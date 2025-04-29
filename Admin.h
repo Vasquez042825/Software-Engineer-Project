@@ -59,6 +59,8 @@ public:
 					password = line;
 				}
 			}
+			adminAccount.clear();
+			adminAccount.seekg(0);
 		}
 
 		else {
@@ -68,43 +70,60 @@ public:
 
 	//Account Creation constructor
 	Admin() {
-		cout << "Please enter an employeeID: ";
-		cin >> employeeID;
+		bool validInput = false;
 
-		adminAccount.open("Admin_info_" + employeeID + ".txt", ios_base::in);
+		while (!validInput) {
+			cout << "Please enter an employeeID (####): ";
+			cin >> employeeID;
 
-		//Check if Admin already exists in database
-		if (adminAccount.is_open()) {
-			cout << "Admin already exists in database. File accessed." << endl;
-		}
-		//Else store Admin profile in database
-		else {
-			cout << "Creating Administrative profile..." << endl;
-			adminAccount.open("Admin_info_" + employeeID + ".txt", ios_base::out);
+			adminAccount.open("Admin_info_" + employeeID + ".txt", ios_base::in);
 
-			//Set Admin's first name and store to file
-			cout << "Please set the Admin's" << endl << "First Name: ";
-			cin >> firstName;
-			adminAccount << "First Name: " << firstName << '\n';
+			//Check if Admin already exists in database
+			if (adminAccount.is_open()) {
+				cout << "Admin already exists in database. Please use another ID." << endl << endl;
+				adminAccount.close();
+			}
+			//Else store Admin profile in database
+			else if (employeeID[0] >= 'A' && employeeID[0] <= 'Z' && employeeID.length() == 4) {
+				cout << "Creating Administrative profile..." << endl;
+				adminAccount.close();
+				adminAccount.open("Admin_info_" + employeeID + ".txt", ios_base::out);
 
-			//Set Admin's last name and store to file
-			cout << "\nLast Name: ";
-			cin >> lastName;
-			adminAccount << "Last Name: " << lastName << '\n';
+				//Set Admin's first name and store to file
+				cout << "Please set the Admin's" << endl << "First Name: ";
+				cin >> firstName;
+				adminAccount << "First Name: " << firstName << '\n';
 
-			//Store Admin's employeeID to file
-			adminAccount << "EmployeeID: " << employeeID << '\n';
+				//Set Admin's last name and store to file
+				cout << "\nLast Name: ";
+				cin >> lastName;
+				adminAccount << "Last Name: " << lastName << '\n';
 
-			//Set Admin's username and store to file
-			cout << "\nUsername: ";
-			cin >> username;
-			adminAccount << "Username: " << username << '\n';
+				//Store Admin's employeeID to file
+				adminAccount << "EmployeeID: " << employeeID << '\n';
 
-			//Set Admin's password and store to file
-			cout << "\nPassword: ";
-			cin >> password;
-			adminAccount << "Password: " << password << '\n';
-			cout << endl;
+				//Set Admin's username and store to file
+				cout << "\nUsername: ";
+				cin >> username;
+				adminAccount << "Username: " << username << '\n';
+
+				//Set Admin's password and store to file
+				cout << "\nPassword: ";
+				cin >> password;
+				adminAccount << "Password: " << password << '\n';
+				cout << endl;
+
+				adminAccount.clear();
+				adminAccount.seekg(0);
+
+				cout << "``````````````````````````````" << endl
+					<< "Account created successfully!" << endl
+					<< "``````````````````````````````" << endl;
+				validInput = true;
+			}
+			else {
+				cout << "Invalid employee ID." << endl << endl;
+			}
 		}
 	}
 
@@ -342,7 +361,7 @@ public:
 
 	//Erases customer's information from database
 	void deactivateCustomerAccount(string customerID) {
-		if ((remove(("Cust_info_" + customerID + ".txt").c_str())) != 0){
+		if ((remove(("Cust_info_" + customerID + ".txt").c_str())) != 0 || (remove(("Cust_" + customerID + ".txt").c_str())) != 0){
 			cout << "Customer account does not exist in database." << endl;
 		}
 		else {
