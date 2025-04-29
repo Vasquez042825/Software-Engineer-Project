@@ -70,7 +70,7 @@ public:
 						}
 
 						//Go to Customer UI
-						showCustomerUI(customerUser, validInput, choice);
+						showCustomerUI(customerUser, validInput, choice, ID);
 					}
 
 					//Ask for ID again if input is invalid
