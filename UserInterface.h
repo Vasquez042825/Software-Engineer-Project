@@ -29,7 +29,7 @@ public:
 
 		while (!validInput) {
 			//Display sign in screen
-			cout << "Welcome to Team 9 Bank! Please choose an option: " << endl
+			cout << "\nWelcome to Team 9 Bank! Please choose an option: " << endl
 				 << "(1) Log-in to existing account" << endl
 				 << "(2) Sign up and create an account" << endl
 			  	 << "(3) Exit Program" << endl;
@@ -37,46 +37,44 @@ public:
 
 			//If user wishes to login to an existing account
 			if (choice == 1) {
-				while (!validInput) {
-					cout << "Please provide your account ID (####): ";
-					cin >> ID;
+				cout << "Please provide your account ID (####): ";
+				cin >> ID;
 
-					//If user inputs an admin ID check if in database and ask user to login
-					if (ID[0] >= 'A' && ID[0] <= 'Z') {
-						Admin administrativeUser(ID);
+				//If user inputs an admin ID check if in database and ask user to login
+				if (ID[0] >= 'A' && ID[0] <= 'Z' && ID.length() == 4) {
+					Admin administrativeUser(ID);
 
-						if (!administrativeUser.checkDatabase()) {
-							return 0;
-						}
-
-						if (!loginAdmin(administrativeUser)) {
-							return 0;
-						}
-
-						//Go to Administrative UI
-						showAdminUI(administrativeUser, validInput, choice, ID);
+					if (!administrativeUser.checkDatabase()) {
+						continue;
 					}
 
-					//If user inputs a customer ID check if in database and ask user to login
-					else if (ID[0] >= 0 && ID[0] <= 9) {
-						Customer customerUser(ID);
-
-						if (!customerUser.checkDatabase()) {
-							return 0;
-						}
-
-						if (!loginCustomer(customerUser)) {
-							return 0;
-						}
-
-						//Go to Customer UI
-						showCustomerUI(customerUser, validInput, choice, ID);
+					if (!loginAdmin(administrativeUser)) {
+						return 0;
 					}
 
-					//Ask for ID again if input is invalid
-					else {
-						cout << "Please provide a valid ID." << endl;
+					//Go to Administrative UI
+					showAdminUI(administrativeUser, validInput, choice, ID);
+				}
+
+				//If user inputs a customer ID check if in database and ask user to login
+				else if (ID[0] >= 48 && ID[0] <= 57 && ID.length() == 4) {
+					Customer customerUser(ID);
+
+					if (!customerUser.checkDatabase()) {
+						continue;
 					}
+
+					if (!loginCustomer(customerUser)) {
+						return 0;
+					}
+
+					//Go to Customer UI
+					showCustomerUI(customerUser, validInput, choice, ID);
+				}
+
+				//Ask for ID again if input is invalid
+				else {
+					cout << "Please provide a valid ID." << endl;
 				}
 			}
 
@@ -99,66 +97,67 @@ public:
 	};
 
 	//Login for Admin ID
-	bool loginAdmin(Admin& administrativeUser, string username = "", string password = "", int failedAttempts = 0) {
-		cout << "Please provide your username and password: " << endl;
-		cout << "Username: ";
-		cin >> username;
-		cout << "Password: ";
-		cin >> password;
-
+	bool loginAdmin(Admin& administrativeUser, string username = "", string password = "", int failedAttempts = 5) {
 		//Cross-reference appropriate admin file for username and password, allowing 5 attempts
-		while (failedAttempts < 5) {
+		while (failedAttempts != 0) {
+			cout << "\nPlease provide your username and password: " << endl;
+			cout << "Username: ";
+			cin >> username;
+			cout << "Password: ";
+			cin >> password;
+
 			if (username == administrativeUser.getUsername() && password == administrativeUser.getPassword()) {
-				cout << "Login successful." << endl;
+				cout << "\nLogin successful." << endl;
 				return true;
 			}
 			else {
-				cout << "Login Attempt Failed." << endl;
-				failedAttempts++;
+				failedAttempts--;
+				cout << "\nLogin Attempt Failed." << endl
+					 << failedAttempts << " attempts remaining" << endl << endl;
 			}
 		}
-		cout << "Could not verify user." << endl;
+		cout << "\nCould not verify user." << endl;
 		return false;
 
 	};
 
 	//Login for Customer ID
-	bool loginCustomer(Customer& customerUser, string username = "", string password = "", int failedAttempts = 0) {
-		cout << "Please provide your username and password: " << endl;
-		cout << "Username: ";
-		cin >> username;
-		cout << "Password: ";
-		cin >> password;
-
+	bool loginCustomer(Customer& customerUser, string username = "", string password = "", int failedAttempts = 5) {
 		//Cross-reference appropriate customer file for username and password, allowing 5 attempts
-		while (failedAttempts < 5) {
+		while (failedAttempts != 0) {
+			cout << "\nPlease provide your username and password: " << endl;
+			cout << "Username: ";
+			cin >> username;
+			cout << "Password: ";
+			cin >> password;
+
 			if (username == customerUser.getUsername() && password == customerUser.getPassword()) {
-				cout << "Login succesful." << endl;
+				cout << "\nLogin succesful." << endl;
 				return true;
 			}
 			else {
-				cout << "Login attempt failed." << endl;
-				failedAttempts++;
+				failedAttempts--;
+				cout << "\nLogin attempt failed." << endl
+					 << failedAttempts << " attempt(s) remaining" << endl << endl;
 			}
 		}
-		cout << "Could not verify user." << endl;
+		cout << "\nCould not verify user." << endl;
 		return false;
 
 	};
 
     // Function to show Customer UI
 	int showCustomerUI(Customer& customerUser, bool& validInput, int& choice, string& ID) {
-		validInput = false;
-
 		//Display Customer options screen
 		while (!validInput) {
-			cout << "What would you like to do? Please choose an option: " << endl
+			cout << "\nWhat would you like to do? Please choose an option: " << endl
 				 << "(1) Make a deposit" << endl
 				 << "(2) Make a withdrawal" << endl
 				 << "(3) View Account Balance" << endl
 			 	 << "(4) View Transaction History" << endl
-				 << "(5) Change account details" << endl
-				 << "(6) Exit Program" << endl;
+				 << "(5) View account details" << endl
+				 << "(6) Change account details" << endl
+				 << "(7) Exit Program" << endl;
 			cin >> choice;
 
 			if (choice == 1) {
@@ -168,7 +167,7 @@ public:
 				cout << "How much would you like to deposit?" << endl
 					 << "$ ";
 				cin >> amount;
-				customerAccount.deposit(amount);
+				customerAccount.deposit(amount, ID);
 			}
 
 			else if (choice == 2) {
@@ -178,7 +177,7 @@ public:
 				cout << "How much would you like to withdraw?" << endl
 					<< "$ ";
 				cin >> amount;
-				customerAccount.withdraw(amount);
+				customerAccount.withdraw(amount, ID);
 			}
 
 			else if (choice == 3) {
@@ -192,9 +191,13 @@ public:
 			}
 
 			else if (choice == 5) {
+				customerUser.display();
+			}
+
+			else if (choice == 6) {
 				string setter = "";	//For changing account details
 
-				cout << "What would you like to change?" << endl
+				cout << "\nWhat would you like to change?" << endl
 					 << "(1) First Name" << endl
 					 << "(2) Last Name" << endl
 					 << "(3) Username" << endl
@@ -228,12 +231,12 @@ public:
 				}
 				else if (choice == 5) {
 					cout << "Please enter new mobile number: ";
-					cin >> setter;
+					getline(cin >> ws, setter);
 					customerUser.setMobileNumber(setter);
 				}
 				else if (choice == 6) {
 					cout << "Please enter new address: ";
-					cin >> setter;
+					getline(cin >> ws, setter);
 					customerUser.setAddress(setter);
 				}
 				else if (choice == 7) {
@@ -254,30 +257,30 @@ public:
 				}
 			}
 
-			else if (choice == 6) {
+			else if (choice == 7) {
 				return 0;
 			}
 
 			else {
 				cout << "Please choose a valid option." << endl;
-			}
+			}a
 
 		}
+		validInput = true;
 	};
 
     // Function to show Admin UI
 	int showAdminUI(Admin& adminUser, bool& validInput, int& choice, string& ID) {
-		validInput = false;
-
 		//Display Admin options screen
 		while (!validInput) {
-			cout << "What would you like to do? Please choose an option: " << endl
+			cout << "\nWhat would you like to do? Please choose an option: " << endl
 				 << "(1) Reset Customer Password" << endl
 				 << "(2) Monitor Customer Transaction History" << endl
 				 << "(3) Freeze User Account" << endl
 				 << "(4) Deactivate Customer Account" << endl
-				 << "(5) Change Account Details" << endl
-				 << "(6) Exit Program" << endl;
+			 	 << "(5) View account details" << endl
+				 << "(6) Change Account Details" << endl
+				 << "(7) Exit Program" << endl;
 			cin >> choice;
 
 			if (choice == 1) {
@@ -312,9 +315,13 @@ public:
 			}
 
 			else if (choice == 5) {
+				adminUser.display();
+			}
+
+			else if (choice == 6) {
 				string setter = "";	//For changing account details
 
-				cout << "What would you like to change?" << endl
+				cout << "\nWhat would you like to change?" << endl
 					 << "(1) First Name" << endl
 					 << "(2) Last Name" << endl
 					 << "(3) Username" << endl
@@ -350,7 +357,7 @@ public:
 				}
 			}
 
-			else if (choice == 6) {
+			else if (choice == 7) {
 				return 0;
 			}
 
@@ -358,6 +365,7 @@ public:
 				cout << "Please choose a valid option." << endl;
 			}
 		}
+		validInput = true;
 	};
 };
 
