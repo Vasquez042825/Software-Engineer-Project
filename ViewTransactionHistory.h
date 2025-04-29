@@ -12,11 +12,12 @@ Files Changed: None
 #define VIEW_TRANSACTION_HISTORY
 #include <iostream>
 #include <fstream>
+#include <string>
 using namespace std;
 
 class ViewTransactionHistory {
 private:
-	ifstream customerInfo;		//For opening customer transaction record file
+	ifstream customerInfo;			//For opening customer transaction record file
 	string transactionRecord = "";	//For holding strings from customer file
 
 public:
@@ -89,7 +90,7 @@ public:
 	//Display customer's entire transaction record with the bank
 	void display() {
 		while (getline(customerInfo, transactionRecord)) {
-			cout << transactionRecord;
+			cout << transactionRecord << endl;
 		}
 	}
 };
