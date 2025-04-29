@@ -1,0 +1,9 @@
+First Name: james
+Last Name: Vasquez
+CustomerID: 1234
+Mobile Number: 836 324 1822
+Address: 222 Johan Dr.
+Email: justinvasquez@aol.com
+DOB: 12/23/10
+Username: justin
+Password: bread
