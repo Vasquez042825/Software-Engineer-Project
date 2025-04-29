@@ -1,0 +1,6 @@
+Transaction Type     Amount       Date        Balance
+Withdrawal	     $80.02     10/14/22     $14,189.37
+Deposit	             $200.31    11/23/22     $14,389.68
+--------------------------------------
+Current Balance: $14,389.68
+FREEZE USER ACCOUNT.
