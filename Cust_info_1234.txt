@@ -1,7 +1,0 @@
-CustomerID: 1234
-First Name: John
-Last Name: Smith
-.
-.
-.
-Password: bread
