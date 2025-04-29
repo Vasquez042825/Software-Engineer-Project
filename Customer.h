@@ -1,7 +1,7 @@
 /*
  Code Artifact : Customer
- Description: Defines Customer entity including personal information and 
-              login credentials.
+ Description: Defines Customer entity including personal information, 
+              and login credentials.
  Programmer: Liza Tamang
  Date Programmed: April 27, 2025
  Variables: 
@@ -14,9 +14,8 @@
   - dateOfBirth: stores customer's date of birth
   - username: stores customer's login username
   - password: stores customer's login password
-  - balance: stores customer's account balance
- Files Accessed: Customers.txt, Cust_info_(customerID).txt
- Files Changed: Customers.txt, Cust_info_(customerID).txt
+ Files Accessed: Cust_info_(customerID).txt
+ Files Changed: Cust_info_(customerID).txt
 */
 
 #pragma once
@@ -24,6 +23,7 @@
 #include <iostream>
 #include <string>
 #include <fstream> 
+#include "TransactionProcessing.h"
 using namespace std;
 
 class Customer {
@@ -43,7 +43,7 @@ public:
     //Log-in constructor
     Customer(string ID) {
         customerAccount.open("Cust_info_" + ID + ".txt", ios_base::in);
-     
+
         if (customerAccount.is_open()) {
             customerID = ID;    //Initialize customerID
             string line = "";   //Searching text from file
@@ -63,14 +63,11 @@ public:
                 }
                 //Initialize customer mobile number from file
                 else if (line == "Mobile") {
-                    customerAccount >> line;
-                    customerAccount >> line;
-                    mobileNumber = line;
+                    getline(customerAccount, mobileNumber);
                 }
                 //Initialize customer address from file
                 else if (line == "Address:") {
-                    customerAccount >> line;
-                    address = line;
+                    getline(customerAccount, address);
                 }
                 //Initialize customer email from file
                 else if (line == "Email:") {
@@ -93,6 +90,8 @@ public:
                     password = line;
                 }
             }
+            customerAccount.clear();
+            customerAccount.seekg(0);
         }
 
         else {
@@ -102,65 +101,80 @@ public:
 
     //Account Creation constructor
     Customer() {
-        cout << "Please enter a Customer ID: ";
-        cin >> customerID;
+        bool validInput = false;
 
-        customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::in);
+        while (!validInput) {
+            cout << "Please enter a Customer ID (####): ";
+            cin >> customerID;
 
-        //Check if Customer already exists in database
-        if (customerAccount.is_open()) {
-            cout << "Customer already exists in database. File accessed." << endl;
-        }
-        //Else store Customer profile in database
-        else {
-            cout << "Creating Customer profile..." << endl;
-            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::out);
+            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::in);
 
-            //Set Customer's first name and store to file
-            cout << "Please set the Customer's" << endl << "First Name: ";
-            cin >> firstName;
-            customerAccount << "First Name: " << firstName << '\n';
+            //Check if Customer already exists in database
+            if (customerAccount.is_open()) {
+                cout << "Customer already exists in database. Please use another ID." << endl << endl;
+                customerAccount.close();
+            }
+            //Else store Customer profile in database
+            else if (customerID[0] >= 48 && customerID[0] <= 57 && customerID.length() == 4) {
+                cout << "Creating Customer profile..." << endl;
+                customerAccount.close();
+                customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::app);
 
-            //Set Customer's last name and store to file
-            cout << "\nLast Name: ";
-            cin >> lastName;
-            customerAccount << "Last Name: " << lastName << '\n';
+                //Set Customer's first name and store to file
+                cout << "Please set the Customer's" << endl << "First Name: ";
+                cin >> firstName;
+                customerAccount << "First Name: " << firstName << '\n';
 
-            //Store Customer's customerID to file
-            customerAccount << "CustomerID: " << customerID << '\n';
+                //Set Customer's last name and store to file
+                cout << "\nLast Name: ";
+                cin >> lastName;
+                customerAccount << "Last Name: " << lastName << '\n';
 
-            //Set Customer's mobile number and store to file
-            cout << "\nMobile Number: ";
-            cin >> mobileNumber;
-            customerAccount << "Mobile Number: " << mobileNumber << '\n';
+                //Store Customer's customerID to file
+                customerAccount << "CustomerID: " << customerID << '\n';
 
-            //Set Customer's address and store to file
-            cout << "\nAddress: ";
-            cin >> address;
-            customerAccount << "Address: " << address << '\n';
+                //Set Customer's mobile number and store to file
+                cout << "\nMobile Number: ";
+                getline(cin >> ws, mobileNumber);
+                customerAccount << "Mobile Number: " << mobileNumber << '\n';
 
-            //Set Customer's email and store to file
-            cout << "\nEmail: ";
-            cin >> email;
-            customerAccount << "Email: " << email << '\n';
+                //Set Customer's address and store to file  
+                cout << "\nAddress: ";
+                getline(cin >> ws, address);
+                customerAccount << "Address: " << address << '\n';
 
-            //Set Customer's birth date and store to file
-            cout << "\nDOB: ";
-            cin >> dateOfBirth;
-            customerAccount << "DOB: " << dateOfBirth << '\n';
+                //Set Customer's email and store to file
+                cout << "\nEmail: ";
+                cin >> email;
+                customerAccount << "Email: " << email << '\n';
 
-            //Set Customer's username and store to file
-            cout << "\nUsername: ";
-            cin >> username;
-            customerAccount << "Username: " << username << '\n';
+                //Set Customer's birth date and store to file
+                cout << "\nDOB (mm/dd/yy): ";
+                cin >> dateOfBirth;
+                customerAccount << "DOB: " << dateOfBirth << '\n';
 
-            //Set Customer's password and store to file
-            cout << "\nPassword: ";
-            cin >> password;
-            customerAccount << "Password: " << password << '\n';
-            cout << endl;
+                //Set Customer's username and store to file
+                cout << "\nUsername: ";
+                cin >> username;
+                customerAccount << "Username: " << username << '\n';
 
-            cout << "Account created successfully!" << endl;
+                //Set Customer's password and store to file
+                cout << "\nPassword: ";
+                cin >> password;
+                customerAccount << "Password: " << password << '\n';
+                cout << endl;
+
+                customerAccount.clear();
+                customerAccount.seekg(0);
+                TransactionProcessing customerInfo(customerID);
+                cout << "``````````````````````````````" << endl 
+                     << "Account created successfully!" << endl
+                     << "``````````````````````````````" << endl;
+                validInput = true;
+            }
+            else {
+                cout << "Invalid customer ID." << endl << endl;
+            }
         }
     }
 
@@ -194,7 +208,6 @@ public:
         fstream tempFile;			//Create new customer account file with updated contents
         string line;				//Store lines from file
 
-        customerAccount.open("Cust_info_" + customerID + ".txt");
         tempFile.open("TEMP.txt", ios_base::out);
 
         //Verify customer account file is accessible and update first name line if true
@@ -225,6 +238,7 @@ public:
             customerAccount.close();
             tempFile.close();
             remove("TEMP.txt");
+            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::in);
             cout << "Customer first name has been updated." << endl;
         }
         else {
@@ -242,7 +256,6 @@ public:
         fstream tempFile;			//Create new customer account file with updated contents
         string line;				//Store lines from file
 
-        customerAccount.open("Cust_info_" + customerID + ".txt");
         tempFile.open("TEMP.txt", ios_base::out);
 
         //Verify customer account file is accessible and update last name line if true
@@ -273,6 +286,7 @@ public:
             customerAccount.close();
             tempFile.close();
             remove("TEMP.txt");
+            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::in);
             cout << "Customer last name has been updated." << endl;
         }
         else {
@@ -290,7 +304,6 @@ public:
         fstream tempFile;			//Create new customer account file with updated contents
         string line;				//Store lines from file
 
-        customerAccount.open("Cust_info_" + customerID + ".txt");
         tempFile.open("TEMP.txt", ios_base::out);
 
         //Verify customer account file is accessible and update mobile number line if true
@@ -321,6 +334,7 @@ public:
             customerAccount.close();
             tempFile.close();
             remove("TEMP.txt");
+            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::in);
             cout << "Customer mobile number has been updated." << endl;
         }
         else {
@@ -338,7 +352,6 @@ public:
         fstream tempFile;			//Create new customer account file with updated contents
         string line;				//Store lines from file
 
-        customerAccount.open("Cust_info_" + customerID + ".txt");
         tempFile.open("TEMP.txt", ios_base::out);
 
         //Verify customer account file is accessible and update address line if true
@@ -369,6 +382,7 @@ public:
             customerAccount.close();
             tempFile.close();
             remove("TEMP.txt");
+            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::in);
             cout << "Customer address has been updated." << endl;
         }
         else {
@@ -386,7 +400,6 @@ public:
         fstream tempFile;			//Create new customer account file with updated contents
         string line;				//Store lines from file
 
-        customerAccount.open("Cust_info_" + customerID + ".txt");
         tempFile.open("TEMP.txt", ios_base::out);
 
         //Verify customer account file is accessible and update email line if true
@@ -417,6 +430,7 @@ public:
             customerAccount.close();
             tempFile.close();
             remove("TEMP.txt");
+            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::in);
             cout << "Customer email has been updated." << endl;
         }
         else {
@@ -434,7 +448,6 @@ public:
         fstream tempFile;			//Create new customer account file with updated contents
         string line;				//Store lines from file
 
-        customerAccount.open("Cust_info_" + customerID + ".txt");
         tempFile.open("TEMP.txt", ios_base::out);
 
         //Verify customer account file is accessible and update DOB line if true
@@ -465,6 +478,7 @@ public:
             customerAccount.close();
             tempFile.close();
             remove("TEMP.txt");
+            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::in);
             cout << "Customer date of birth has been updated." << endl;
         }
         else {
@@ -482,7 +496,6 @@ public:
         fstream tempFile;			//Create new customer account file with updated contents
         string line;				//Store lines from file
 
-        customerAccount.open("Cust_info_" + customerID + ".txt");
         tempFile.open("TEMP.txt", ios_base::out);
 
         //Verify customer account file is accessible and update username line if true
@@ -513,6 +526,7 @@ public:
             customerAccount.close();
             tempFile.close();
             remove("TEMP.txt");
+            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::in);
             cout << "Customer username has been updated." << endl;
         }
         else {
@@ -529,7 +543,6 @@ public:
         fstream tempFile;			//Create new customer account file with updated contents
         string line;				//Store lines from file
 
-        customerAccount.open("Cust_info_" + customerID + ".txt");
         tempFile.open("TEMP.txt", ios_base::out);
 
         //Verify customer account file is accessible and update password line if true
@@ -560,6 +573,7 @@ public:
             customerAccount.close();
             tempFile.close();
             remove("TEMP.txt");
+            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::in);
             cout << "Customer password has been updated." << endl;
         }
         else {
@@ -570,11 +584,14 @@ public:
     // display() - outputs all customer information in a neat, formatted manner
     void display() const {
         cout << "Customer Information:" << endl;
+        cout << "~~~~~~~~~~~~~~~~~~~~~~" << endl;
         cout << "ID:      " << customerID << endl;
         cout << "Name:    " << firstName << " " << lastName << endl;
-        cout << "Mobile:  " << mobileNumber << endl;
+        cout << "Mobile" << mobileNumber << endl;
         cout << "Address: " << address << endl;
         cout << "Email:   " << email << endl;
         cout << "DOB:     " << dateOfBirth << endl;
+        cout << "Username: " << username << endl;
+        cout << "Password: " << password << endl;
     }
 };
