@@ -1,3 +1,0 @@
-First Name: Joan
-Last Name: Knickson
-EmployeeID: 456
