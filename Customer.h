@@ -1,7 +1,7 @@
 /*
  Code Artifact : Customer
- Description: Defines Customer entity including personal information, 
-              login credentials, and account balance.
+ Description: Defines Customer entity including personal information and 
+              login credentials.
  Programmer: Liza Tamang
  Date Programmed: April 27, 2025
  Variables: 
@@ -37,13 +37,67 @@ private:
     string dateOfBirth = "N/A";     // Customer's date of birth
     string username = "N/A";        // Customer's username
     string password = "N/A";        // Customer's password
-    string balance = "N/A";         // Customer's account balance
     fstream customerAccount;        // Access customer's account file
 
 public:
     //Log-in constructor
     Customer(string ID) {
         customerAccount.open("Cust_info_" + ID + ".txt", ios_base::in);
+     
+        if (customerAccount.is_open()) {
+            customerID = ID;    //Initialize customerID
+            string line = "";   //Searching text from file
+
+            while (customerAccount >> line) {
+                //Initialize customer first name from file
+                if (line == "First") {
+                    customerAccount >> line;
+                    customerAccount >> line;
+                    firstName = line;
+                }
+                //Initialize customer last name from file
+                else if (line == "Last") {
+                    customerAccount >> line;
+                    customerAccount >> line;
+                    lastName = line;
+                }
+                //Initialize customer mobile number from file
+                else if (line == "Mobile") {
+                    customerAccount >> line;
+                    customerAccount >> line;
+                    mobileNumber = line;
+                }
+                //Initialize customer address from file
+                else if (line == "Address:") {
+                    customerAccount >> line;
+                    address = line;
+                }
+                //Initialize customer email from file
+                else if (line == "Email:") {
+                    customerAccount >> line;
+                    email = line;
+                }
+                //Initialize customer date of birth from file
+                else if (line == "DOB:") {
+                    customerAccount >> line;
+                    dateOfBirth = line;
+                }
+                //Initialize customer username from file
+                else if (line == "Username:") {
+                    customerAccount >> line;
+                    username = line;
+                }
+                //Initialize customer password from file
+                else if (line == "Password:") {
+                    customerAccount >> line;
+                    password = line;
+                }
+            }
+        }
+
+        else {
+            cout << "Customer information could not be found." << endl;
+        }
     }
 
     //Account Creation constructor
@@ -106,8 +160,7 @@ public:
             customerAccount << "Password: " << password << '\n';
             cout << endl;
 
-            //Setup balance tracker in file
-            customerAccount << "Balance: ";
+            cout << "Account created successfully!" << endl;
         }
     }
 
@@ -514,56 +567,6 @@ public:
         }
     }
 
-    // Getter for balance
-    string getBalance() const {
-        return balance;
-    }
-
-    // Setter for balance
-    void setBalance(string newBalance) {
-        balance = newBalance;
-
-        fstream tempFile;			//Create new customer account file with updated contents
-        string line;				//Store lines from file
-
-        customerAccount.open("Cust_info_" + customerID + ".txt");
-        tempFile.open("TEMP.txt", ios_base::out);
-
-        //Verify customer account file is accessible and update balance if true
-        if (customerAccount.is_open()) {
-            while (getline(customerAccount, line)) {
-                if (line[0] == 'B') {
-                    tempFile << "Balance: " << balance << '\n';
-                    tempFile.flush();
-                    continue;
-                }
-
-                tempFile << line << '\n';
-                tempFile.flush();
-
-            }
-
-            customerAccount.close();
-            tempFile.close();
-
-            //Close and reopen temp file and customer account file to truncate account file for updating
-            tempFile.open("TEMP.txt", ios_base::in);
-            customerAccount.open("Cust_info_" + customerID + ".txt", ios_base::trunc | ios::out);
-
-            while (getline(tempFile, line)) {
-                customerAccount << line << '\n';
-            }
-
-            customerAccount.close();
-            tempFile.close();
-            remove("TEMP.txt");
-            cout << "Customer password has been updated." << endl;
-        }
-        else {
-            cout << "Customer account does not exist in database." << endl;
-        }
-    }
-
     // display() - outputs all customer information in a neat, formatted manner
     void display() const {
         cout << "Customer Information:" << endl;
@@ -573,6 +576,5 @@ public:
         cout << "Address: " << address << endl;
         cout << "Email:   " << email << endl;
         cout << "DOB:     " << dateOfBirth << endl;
-        cout << "Balance: $" << balance << endl;
     }
 };
